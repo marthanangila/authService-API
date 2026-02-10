@@ -1,18 +1,20 @@
 from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
-from typing import Optional
 
-# format users should adhere to
+
+# Format users should adhere to when registering
 class UserRegister(BaseModel):
     email: EmailStr
-    username: str= Field(..., min_length=3, max_length=20)
-    password: str= Field(..., min_length=8)
+    username: str = Field(..., min_length=3, max_length=20)
+    password: str = Field(..., min_length=8)
 
+
+# Format for login
 class UserLogin(BaseModel):
-    username: str
+    email: EmailStr
     password: str
 
-#format of what we send back
+# Format of what we send back after registration
 class UserResponse(BaseModel):
     id: int
     email: str
@@ -20,10 +22,12 @@ class UserResponse(BaseModel):
     is_active: bool
     created_at: datetime
 
+    model_config = {"from_attributes": True}
+
 class Token(BaseModel):
     access_token: str
-    token_type: str= "bearer"
+    token_type: str = "bearer"
 
 class TokenData(BaseModel):
-    username: Optional[str]= None
+    username: str | None = None
 
